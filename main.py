@@ -53,7 +53,7 @@ FEATURE_NAMES = [
 
 
 @asynccontextmanager
-async def lifespan(_app: FastAPI):
+async def lifespan(app: FastAPI):
     """
     应用程序生命周期管理器
     
