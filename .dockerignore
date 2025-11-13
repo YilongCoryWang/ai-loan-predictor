@@ -1,0 +1,10 @@
+__pycache__
+.ipynb_checkpoints
+*.csv
+*_model.py
+*_models.py
+trainer.ipynb
+.gitignore
+Dockerfile
+.dockerignore
+README.md
