@@ -43,10 +43,6 @@ jobs:
       run: |
         echo "Running unit tests..."
         python -m unittest discover -v
-    
-    - name: Verify test coverage
-      run: |
-        echo "Test execution completed. Check the logs above for detailed results."
 
   lint:
     runs-on: ubuntu-latest
@@ -69,8 +65,8 @@ jobs:
       run: |
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        # 移除--exit-zero参数，确保lint问题导致构建失败
+        flake8 . --count --max-complexity=10 --max-line-length=127 --statistics
 
     - name: Lint with pylint
       run: |
