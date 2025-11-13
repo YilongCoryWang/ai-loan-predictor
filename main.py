@@ -1,11 +1,15 @@
+"""
+贷款预测API服务
+
+此模块提供了一个FastAPI应用程序，用于预测贷款申请的批准状态。
+应用程序加载预训练的模型和缩放器，并通过RESTful端点提供预测服务。
+"""
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import numpy as np
 import joblib
 import pandas as pd
 import logging
-from dotenv import load_dotenv
 import os
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -49,7 +53,15 @@ FEATURE_NAMES = [
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(_app: FastAPI):
+    """
+    应用程序生命周期管理器
+    
+    负责在应用启动时加载模型和缩放器，在应用关闭时执行清理操作。
+    
+    Args:
+        _app: FastAPI应用实例（未使用但符合上下文管理器接口要求）
+    """
     # --- Startup Logic (Runs BEFORE the application starts serving requests) ---
     try:
         global model, scaler
@@ -77,6 +89,14 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
 def home():
+    """
+    首页端点
+    
+    返回应用程序的静态HTML首页。
+    
+    Returns:
+        FileResponse: 包含HTML首页的文件响应
+    """
     html_file_path = os.path.join("static", "index.html")
     return FileResponse(html_file_path, media_type="text/html")
 

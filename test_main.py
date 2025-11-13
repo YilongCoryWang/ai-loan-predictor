@@ -1,6 +1,5 @@
 import unittest
 from unittest.mock import patch, MagicMock
-import pandas as pd
 import numpy as np
 from fastapi.testclient import TestClient
 import sys
