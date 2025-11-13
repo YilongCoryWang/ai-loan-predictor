@@ -94,7 +94,6 @@ async def predict_loan(features: LoanFeatures):
         feature_dict = features.model_dump()
         feature_data = pd.DataFrame([feature_dict])
 
-        global model, scaler, FEATURE_NAMES
         data_for_scaling = feature_data[FEATURE_NAMES]
         log.info(f"Feature data for scaling: {data_for_scaling}")
         feature_data_scaled = scaler.transform(data_for_scaling)
