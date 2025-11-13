@@ -53,12 +53,12 @@ FEATURE_NAMES = [
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(_app: FastAPI):
     """
     应用程序生命周期管理器
-    
+
     负责在应用启动时加载模型和缩放器，在应用关闭时执行清理操作。
-    
+
     Args:
         _app: FastAPI应用实例（未使用但符合上下文管理器接口要求）
     """
@@ -91,9 +91,9 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 def home():
     """
     首页端点
-    
+
     返回应用程序的静态HTML首页。
-    
+
     Returns:
         FileResponse: 包含HTML首页的文件响应
     """

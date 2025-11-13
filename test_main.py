@@ -1,26 +1,28 @@
+import sys
+import os
 import unittest
 from unittest.mock import patch, MagicMock
 import numpy as np
 from fastapi.testclient import TestClient
-import sys
-import os
-from contextlib import asynccontextmanager
 
-# Add current directory to path for imports
+# Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from main import app, LoanFeatures, lifespan, FEATURE_NAMES
+# Import from main module
+from main import app, LoanFeatures, FEATURE_NAMES, lifespan
+
 
 class TestLoanPrediction(unittest.TestCase):
     def setUp(self):
         # Create a test client without starting the actual application lifespan
         self.client = TestClient(app)
-    
+
     @patch('main.model')
     @patch('main.scaler')
     def test_predict_loan_approved(self, mock_scaler, mock_model):
         """Test loan prediction endpoint with approved result"""
         # Setup mocks
+
         mock_scaler.transform.return_value = np.array([[1, 1, 0, 1, 0, 5000, 0, 150, 360, 1, 2]])
         mock_model.predict.return_value = np.array([1])  # 1 means approved
         
@@ -37,9 +39,11 @@ class TestLoanPrediction(unittest.TestCase):
             "Loan_Amount_Term": 360.0,
             "Credit_History": 1.0,
             "Property_Area": 2
+
         }
         
         # Make request
+
         response = self.client.post("/predict_loan_status", json=test_data)
         
         # Assertions
@@ -113,7 +117,7 @@ class TestLoanPrediction(unittest.TestCase):
         self.assertEqual(response.status_code, 200)  # The endpoint returns 200 with error message
         self.assertIn("error", response.json())
         self.assertEqual(response.json()["error"], "Prediction failed due to server error.")
-    
+
     def test_pydantic_model_validation(self):
         """Test LoanFeatures Pydantic model validation"""
         # Valid data
@@ -139,6 +143,7 @@ class TestLoanPrediction(unittest.TestCase):
             self.fail(f"LoanFeatures creation with valid data raised Exception: {e}")
     
     def test_predict_loan_invalid_data(self):
+
         """Test loan prediction with invalid input data"""
         # Missing required field
         invalid_data = {
@@ -162,6 +167,7 @@ class TestLoanPrediction(unittest.TestCase):
         self.assertEqual(response.status_code, 422)  # FastAPI validation error
     
     def test_home_endpoint(self):
+
         """Test home endpoint returns index.html without modifying source files"""
         # Do NOT modify original static files
         # Instead, we'll test that the endpoint exists and returns HTML
@@ -185,6 +191,7 @@ class TestLoanPrediction(unittest.TestCase):
                 raise
         
     @patch('joblib.load')
+
     @patch('os.getenv')
     def test_lifespan_startup_success(self, mock_getenv, mock_joblib_load):
         """Test lifespan startup logic with successful model loading"""
@@ -197,18 +204,15 @@ class TestLoanPrediction(unittest.TestCase):
         # Since lifespan is an async context manager, we need to use asyncio
         # For simplicity, we'll just verify the mocks are called correctly
         # without actually running the async context manager
-        from main import lifespan
         
         # Verify joblib.load is called for model and scaler
         # We won't actually execute the async context manager directly
         # as that requires an event loop
         try:
             # We can check if the mocks work correctly when the lifespan is called
-            # This approach tests the joblib loading mechanism without needing async execution
-            self.assertEqual(mock_joblib_load.call_count, 0)
-            
-            # Import model and scaler to verify they will be set correctly
-            from main import model, scaler
+              # This approach tests the joblib loading mechanism without needing async execution
+              self.assertEqual(mock_joblib_load.call_count, 0)
+              # No need to import model and scaler since we're just testing the imports
             # Just verify that the import works - the actual setting happens in the lifespan
         except Exception as e:
             self.fail(f"Test setup failed: {e}")
@@ -227,6 +231,7 @@ class TestLoanPrediction(unittest.TestCase):
                 pass
 
     def test_feature_names_constant(self):
+
         """Test that FEATURE_NAMES contains all required feature columns."""
         # Verify FEATURE_NAMES has correct number of columns
         self.assertEqual(len(FEATURE_NAMES), 11)
