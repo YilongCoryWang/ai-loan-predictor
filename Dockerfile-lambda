@@ -1,0 +1,23 @@
+# 使用AWS官方的Lambda Python基础镜像（使用Python 3.13以匹配本地环境）
+FROM public.ecr.aws/lambda/python:3.13
+
+# 将工作目录设置为Lambda执行环境的标准目录
+WORKDIR ${LAMBDA_TASK_ROOT}
+
+# 复制必要的文件到容器
+COPY lambda_handler.py .
+COPY loan_model.pkl .
+COPY loan_scaler.pkl .
+COPY requirements.txt .
+
+# 升级pip
+RUN pip install --no-cache-dir --upgrade pip
+
+# 尝试直接安装依赖，使用最新版本的numpy以确保与Python 3.13兼容
+# 使用与Python 3.13兼容的numpy版本
+RUN pip install --no-cache-dir --only-binary=:all: numpy
+# 然后安装requirements.txt中的其他依赖（不包括numpy，避免版本冲突）
+RUN grep -v '^numpy' requirements.txt > requirements_no_numpy.txt && pip install --no-cache-dir --only-binary=:all: -r requirements_no_numpy.txt
+
+# 设置Lambda函数的处理程序
+CMD ["lambda_handler.lambda_handler"]
