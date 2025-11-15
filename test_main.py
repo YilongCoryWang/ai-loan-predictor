@@ -47,7 +47,7 @@ class TestLoanPrediction(unittest.TestCase):
         response = self.client.post("/predict_loan_status", json=test_data)
         
         # Assertions
-        self.assertEqual(response.status_code, 300)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {
             "prediction": 1,
             "message": "Loan Approved"
