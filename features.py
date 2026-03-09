@@ -1,4 +1,6 @@
 
+from pydantic import BaseModel
+
 class LoanFeatures(BaseModel):
     """
     Defines the input features for the loan eligibility prediction model.
