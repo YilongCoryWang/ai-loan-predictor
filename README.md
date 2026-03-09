@@ -1,6 +1,6 @@
 # Loan Prediction System
 
-A machine learning application for loan approval prediction using FastAPI</p>
+A machine learning application for loan approval prediction using FastAPI and AWS lambda</p>
 
 ## 📋 Overview
 
@@ -8,6 +8,7 @@ This repository contains a complete loan prediction system that combines:
 - Jupyter notebook for model training and evaluation
 - FastAPI service for real-time predictions
 - Docker support for easy deployment
+- AWS lambda for serverless deployment
 
 ## 📁 Project Structure
 
@@ -15,11 +16,14 @@ This repository contains a complete loan prediction system that combines:
 loan/
 ├── trainer.ipynb      # Model training and evaluation
 ├── main.py           # FastAPI application
+├── features.py       # Feature models
+├── lambda_handler.py # Lambda function
 ├── loan.csv          # Training dataset
 ├── loan_model.pkl    # Trained SVM model
 ├── loan_scaler.pkl   # Feature scaler
 ├── requirements.txt  # Python dependencies
 ├── Dockerfile        # Container configuration
+├── Dockerfile-lambda # Lambda container configuration
 ├── static/           # Frontend files
 └── start.sh          # Startup script
 ```
