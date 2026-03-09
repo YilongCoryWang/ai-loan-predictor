@@ -6,6 +6,7 @@ WORKDIR ${LAMBDA_TASK_ROOT}
 
 # 复制必要的文件到容器
 COPY lambda_handler.py .
+COPY features.py .
 COPY loan_model.pkl .
 COPY loan_scaler.pkl .
 COPY requirements.txt .
