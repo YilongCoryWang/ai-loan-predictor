@@ -6,50 +6,17 @@
 """
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
 import joblib
 import pandas as pd
 import logging
 import os
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
+from features import LoanFeatures, FEATURE_NAMES
 
 model = None
 scaler = None
 log = logging.getLogger("uvicorn")
-
-
-class LoanFeatures(BaseModel):
-    """
-    Defines the input features for the loan eligibility prediction model.
-    """
-
-    Gender: int
-    Married: int
-    Dependents: int
-    Education: int
-    Self_Employed: int
-    ApplicantIncome: int
-    CoapplicantIncome: float
-    LoanAmount: float
-    Loan_Amount_Term: float
-    Credit_History: float
-    Property_Area: int
-
-
-FEATURE_NAMES = [
-    "Gender",
-    "Married",
-    "Dependents",
-    "Education",
-    "Self_Employed",
-    "ApplicantIncome",
-    "CoapplicantIncome",
-    "LoanAmount",
-    "Loan_Amount_Term",
-    "Credit_History",
-    "Property_Area",
-]
 
 
 @asynccontextmanager
